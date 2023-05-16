@@ -116,16 +116,14 @@
 # graph_1.set_data([10, -5, 100, 20, 0, 80, 45, 2, 5, 7])
 # # graph_1.draw()
 
-
 class Translator:
-    dict_words = {}
-
     def add(self, eng, rus):
-         if eng not in self.dict_words:
-             self.dict_words[eng] = []
-         if eng in self.dict_words:
-             self.dict_words[eng].append(rus)
-
+        if 'dict_words' not in self.__dict__:
+            self.dict_words = {}
+        if eng not in self.dict_words:
+            self.dict_words[eng] = []
+        if rus not in self.dict_words[eng]:
+            self.dict_words[eng].append(rus)
 
     def remove(self, eng):
         self.dict_words.pop(eng)
@@ -133,12 +131,19 @@ class Translator:
     def translate(self, eng):
         return self.dict_words[eng] if eng in self.dict_words else None
 
+
 tr = Translator()
+tr.add('tree', 'дерево')
+tr.add('car', 'машина')
+tr.add('car', 'автомобиль')
+tr.add('leaf', 'лист')
+tr.add('river', 'река')
+tr.add('go', 'идти')
+tr.add('go', 'ехать')
+tr.add('go', 'ходить')
+tr.add('go', 'ходить')
+tr.add('go', 'ходить')
+tr.add('milk', 'молоко')
 
-tr.add('word', 'слово')
-tr.add('word', 'синоним')
-tr.add('game', 'игра')
-tr.remove('word')
-
-print(tr.translate('word'))
-print(tr.translate('game'))
+tr.remove('car')
+print(*tr.translate('go'))
