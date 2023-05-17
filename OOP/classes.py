@@ -146,4 +146,25 @@ tr.add('go', 'ходить')
 tr.add('milk', 'молоко')
 
 tr.remove('car')
-print(*tr.translate('go'))
+#print(*tr.translate('go'))
+
+class TriangleChecker:
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def is_triangle(self):
+        lst_points = [self.a, self.b, self.c]
+        if any(map(lambda x: True if type(x) != int and type(x) != float else False, lst_points)):
+            return 1
+        elif not (a + b > c and a + c > b and b + c > a):
+            return 2
+        else:
+            return 3
+
+
+a, b, c = map(int, input().split())  # эту строчку не менять
+# здесь создайте экземпляр tr класса TriangleChecker и вызовите метод is_triangle() с выводом информации на экран
+tr = TriangleChecker(a, b, c)
+print(tr.is_triangle())
