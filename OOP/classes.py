@@ -155,16 +155,17 @@ class TriangleChecker:
         self.c = c
 
     def is_triangle(self):
-        lst_points = [self.a, self.b, self.c]
-        if any(map(lambda x: True if type(x) != int and type(x) != float else False, lst_points)):
+        lst_points = (self.a, self.b, self.c)
+        if not all(map(lambda x: type(x) in (int, float), lst_points)):
             return 1
-        elif not (a + b > c and a + c > b and b + c > a):
+        if not all(map(lambda x: x > 0, lst_points)):
+            return 1
+        if self.a >= self.b + self.c or self.b >= self.a + self.c or self.c >= self.b + self.a:
             return 2
-        else:
-            return 3
+        return 3
 
 
-a, b, c = map(int, input().split())  # эту строчку не менять
+#a, b, c = map(int, input().split())  # эту строчку не менять
 # здесь создайте экземпляр tr класса TriangleChecker и вызовите метод is_triangle() с выводом информации на экран
-tr = TriangleChecker(a, b, c)
+tr = TriangleChecker(3.0, 4.0, 5.0)
 print(tr.is_triangle())
