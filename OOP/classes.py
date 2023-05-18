@@ -205,9 +205,34 @@ class Graph:
 # считывание списка из входного потока (эту строку не менять)
 data_graph = list(map(int, input().split()))
 
+
 # здесь создаются объекты классов и вызываются нужные методы
 
-gr = Graph(data_graph)
-gr.show_bar()
-gr.set_show(False)
-gr.show_table()
+# gr = Graph(data_graph)
+# gr.show_bar()
+# gr.set_show(False)
+# gr.show_table()
+
+class CPU:
+    def __init__(self, name, fr):
+        self.name = name
+        self.fr = fr
+
+
+class Memory:
+    def __init__(self, name, volume):
+        self.name = name
+        self.volume = volume
+
+
+class MotherBoard:
+    def __init__(self, name, cpu, mem_slots, total_mem_slots=4):
+        self.name = name
+        self.cpu = cpu
+        self.mem_slots = mem_slots
+
+    def get_config(self):
+        "returns information of components"
+        return f''
+
+
