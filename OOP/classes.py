@@ -203,7 +203,7 @@ class Graph:
 
 
 # считывание списка из входного потока (эту строку не менять)
-data_graph = list(map(int, input().split()))
+#data_graph = list(map(int, input().split()))
 
 
 # здесь создаются объекты классов и вызываются нужные методы
@@ -235,4 +235,52 @@ class MotherBoard:
         "returns information of components"
         return f''
 
+
+# здесь пишите программу
+class Cart:
+    def __init__(self):
+        self.goods = []
+
+    def add(self, gd):
+        self.goods.append(gd)
+
+    def remove(self, indx):
+        self.goods.pop(indx)
+
+    def get_list(self):
+        return [f"{i.name}: {i.price}" for i in self.goods]
+
+
+class Table:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+class TV:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+class Notebook:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+class Cup:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+cart = Cart()
+
+cart.add(TV('LG', 10000))
+cart.add(TV('Lenovo', 15000))
+cart.add(Table('Nike', 5000))
+cart.add(Notebook('HP', 40000))
+cart.add(Notebook('Asus', 60000))
+cart.add(Cup('Black', 500))
 
