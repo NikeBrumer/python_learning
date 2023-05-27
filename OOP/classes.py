@@ -284,3 +284,63 @@ cart.add(Notebook('HP', 40000))
 cart.add(Notebook('Asus', 60000))
 cart.add(Cup('Black', 500))
 
+
+# здесь объявляйте класс SingletonFive
+class SingletonFive:
+    counter = 0
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.counter < 6:
+            cls.counter += 1
+            cls.__instance = super().__new__(cls)
+            return cls.__instance
+        return cls.__instance
+
+    def __init__(self, name):
+        self.name = name
+
+
+objs = [SingletonFive(str(n)) for n in range(10)]  # эту строчку не менять
+
+
+# здесь пишется программа
+class Cell:
+    def __init__(self, around_mines=0, mine=False):
+        self.around_mines = around_mines  # число мин вокруг клетки
+        self.mine = mine  # наличие мины в текущей клетке
+        self.fl_open = True  # состояние клетки (закрыта/открыта)
+
+
+class GamePole:
+    def __init__(self, N, M):
+        self.N = N  # размер поля N x N
+        self.M = M  # количество мин
+        self.pole = [[Cell() for j in range(self.N)] for i in range(self.N)]
+        self.init()
+
+    def init(self):
+        from random import randint
+
+        for _ in range(self.M):
+            i = randint(0, self.N - 1)
+            j = randint(0, self.N - 1)
+            if not self.pole[i][j].mine:
+                self.pole[i][j].mine = True
+
+        indx = (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)
+        for x in range(self.N):
+            for y in range(self.N):
+                if not self.pole[x][y].mine:
+                    for i, j in indx:
+                        if 0 <= x+i < self.N and 0 <= y+j < self.N:
+                            if self.pole[x + i][y + j].mine:
+                                self.pole[x][y].around_mines += 1
+
+
+    def show(self):
+        [print(*map(lambda x: '#' if not x.fl_open else x.around_mines if not x.mine else '*', i)) for i in self.pole]
+
+
+pole_game = GamePole(10, 12)
+pole_game.show()
