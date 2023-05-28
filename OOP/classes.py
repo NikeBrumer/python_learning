@@ -203,7 +203,7 @@ class Graph:
 
 
 # считывание списка из входного потока (эту строку не менять)
-#data_graph = list(map(int, input().split()))
+# data_graph = list(map(int, input().split()))
 
 
 # здесь создаются объекты классов и вызываются нужные методы
@@ -333,14 +333,152 @@ class GamePole:
             for y in range(self.N):
                 if not self.pole[x][y].mine:
                     for i, j in indx:
-                        if 0 <= x+i < self.N and 0 <= y+j < self.N:
+                        if 0 <= x + i < self.N and 0 <= y + j < self.N:
                             if self.pole[x + i][y + j].mine:
                                 self.pole[x][y].around_mines += 1
-
 
     def show(self):
         [print(*map(lambda x: '#' if not x.fl_open else x.around_mines if not x.mine else '*', i)) for i in self.pole]
 
 
 pole_game = GamePole(10, 12)
-pole_game.show()
+# pole_game.show()
+
+
+from string import ascii_lowercase, digits
+
+
+# здесь объявляйте классы TextInput и PasswordInput
+
+class TextInput:
+    CHARS = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя " + ascii_lowercase
+    CHARS_CORRECT = CHARS + CHARS.upper() + digits
+
+    def __init__(self, name, size):
+        if self.check_name(name):
+            self.name = name
+        else:
+            raise ValueError("некорректное поле name")
+        self.size = size
+
+    def get_html(self):
+        return f"<p class='login'>{self.name}: <input type='text' size={self.size} />"
+
+    @classmethod
+    def check_name(cls, name):
+        if 2 < len(name) < 50:
+            for i in name:
+                if i not in cls.CHARS_CORRECT:
+                    break
+            else:
+                return True
+        return False
+
+
+class PasswordInput:
+    CHARS = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя " + ascii_lowercase
+    CHARS_CORRECT = CHARS + CHARS.upper() + digits
+
+    def __init__(self, name, size):
+        if self.check_name(name):
+            self.name = name
+        else:
+            raise ValueError("некорректное поле name")
+        self.size = size
+
+    def get_html(self):
+        return f"<p class='password'>{self.name}: <input type='text' size={self.size} />"
+
+    @classmethod
+    def check_name(cls, name):
+        if 2 < len(name) < 50:
+            for i in name:
+                if i not in cls.CHARS_CORRECT:
+                    break
+            else:
+                return True
+        return False
+
+
+class FormLogin:
+    def __init__(self, lgn, psw):
+        self.login = lgn
+        self.password = psw
+
+    def render_template(self):
+        return "\n".join(['<form action="#">', self.login.get_html(), self.password.get_html(), '</form>'])
+
+
+# эти строчки не менять
+login = FormLogin(TextInput("Логин", 5), PasswordInput("Пароль", 10))
+html = login.render_template()
+
+
+############################################################################### 5/28/2023
+class Router:
+
+    def __init__(self):
+        self.servers = {}
+        self.buffer = []
+
+    def link(self, server):
+        server.status = True
+        self.servers[server] = server.status
+        server.router = self
+
+    def unlink(self, server):
+        server.status = False
+        self.servers[server] = server.status
+
+    def send_data(self):
+        online = list(filter(lambda x: x.status, self.servers))
+        for inst in self.buffer[:]:
+            for serv in online:
+                if inst.ip == serv.ip:
+                    serv.buffer.append(inst)
+                    self.buffer.remove(inst)
+
+
+class Server:
+    ip_serv = 0
+
+    def __new__(cls, *args, **kwargs):
+        cls.ip_serv += 1
+        return super().__new__(cls)
+
+    def __init__(self):
+        self.status = False
+        self.ip = Server.ip_serv
+        self.buffer = []
+        self.router = None
+
+    def send_data(self, data):
+        if self.status:
+            self.router.buffer.append(data)
+
+    def get_data(self):
+        res = self.buffer
+        self.buffer = []
+        return res
+
+    def get_ip(self):
+        return self.ip
+
+
+class Data:
+    def __init__(self, data, ip):
+        self.data = data
+        self.ip = ip
+
+
+router = Router()
+
+ser = Server()
+ser2 = Server()
+
+router.link(ser)
+router.link(ser2)
+
+ser.send_data(Data('abc', ser2.get_ip()))
+router.send_data()
+
